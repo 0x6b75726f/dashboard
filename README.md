@@ -1,11 +1,11 @@
 # Personal Dashboard
+- Docker
 
-- Node.js 18+ and npm
-- Docker (optional, for containerized deployment)
+Self publishing:
+- Pushing to main -> Github actions -> Dockerhub -> watchtower in docker compose -> updated image -> live website
 
 ### Development Setup
 
- **Install dependencies**
    ```bash
    npm install
    ```
@@ -30,6 +30,7 @@
 
  **Start development server**
    ```bash
+   node server   # local proxy for api's
    npm run dev
    ```
 
@@ -40,9 +41,7 @@
    ```
   Server runs on `http://localhost:3000`
 
-## 🧪 Testing
-
-
+## Testing
 ```bash
 # Run tests in watch mode
 npm test
@@ -57,11 +56,7 @@ npm run test:coverage
 npm run test:ui
 ```
 
-### Test Coverage
-- Error boundary component tests
-- Custom hooks tests (useLocalStorage, useApiCall)
-- Utility function tests (logger)
-- More tests can be added in `src/test/`
+- Tests in `src/test/`
 
 ## 🏗️ Architecture
 
@@ -69,31 +64,11 @@ npm run test:ui
 ```
 dashboard/
 ├── api/                    # Backend API handlers
-│   ├── weather.js         # YR.no weather API
-│   ├── crypto.js          # CoinGecko crypto prices
-│   ├── github.js          # GitHub user/repo data
-│   ├── twitch.js          # Twitch streams
-│   ├── vg-summary.js      # VG news with AI summaries
-│   ├── command.js         # Linux command tips
-│   ├── calendar.js        # Google Calendar integration
-│   └── suggest.js         # Search suggestions
 ├── public/
 │   ├── cheats.json        # 10K+ Linux commands database
 │   └── icons/
 ├── src/
 │   ├── components/        # React components
-│   │   ├── ErrorBoundary.jsx      # Error handling
-│   │   ├── BookmarksCard.tsx      # Bookmarks widget (TypeScript)
-│   │   ├── CalendarCard.tsx       # Calendar widget (TypeScript)
-│   │   ├── WeatherCard.jsx
-│   │   ├── CryptoCard.jsx
-│   │   ├── GithubCard.jsx
-│   │   ├── TwitchCard.jsx
-│   │   ├── VGCard.jsx
-│   │   ├── FocusTimer.jsx
-│   │   ├── SmartSearchBar.jsx
-│   │   ├── Globe.jsx
-│   │   └── SettingsPanel.jsx
 │   ├── hooks/             # Custom React hooks
 │   │   ├── useApiCall.js         # Standardized fetch wrapper
 │   │   ├── useLocalStorage.js    # LocalStorage with validation
@@ -106,10 +81,6 @@ dashboard/
 │   ├── utils/
 │   │   └── logger.js      # Centralized logging
 │   ├── test/              # Test files
-│   │   ├── setup.js
-│   │   ├── ErrorBoundary.test.jsx
-│   │   ├── useLocalStorage.test.js
-│   │   └── logger.test.js
 │   ├── App.jsx            # Main application
 │   ├── App.css
 │   ├── main.jsx
@@ -141,17 +112,7 @@ dashboard/
 
 Settings are automatically persisted to localStorage and synced across components.
 
-### API Architecture
-
-All API endpoints follow a consistent pattern:
-- Mounted at `/api/*` routes
-- CORS enabled for all origins (development convenience)
-- Caching headers for appropriate endpoints
-- Centralized error handling
-- Rate limiting ready (add `express-rate-limit` if needed)
-
 ### Adding New Widgets
-
 1. Create component in `src/components/YourWidget.jsx` or `.tsx`
 2. Add widget ID to `settingsStore.js` default layout
 3. Import and add to `widgetMap` in `App.jsx`
@@ -201,7 +162,6 @@ services:
     restart: unless-stopped
 ```
 
-
 - Use `logger.debug()` for development-only logs
 - Inspect Redux DevTools for Zustand state (with middleware)
 
@@ -213,49 +173,6 @@ services:
 - Write tests for new features
 - Mock API calls in tests
 - Use `screen.getByRole()` for accessibility-friendly selectors
-
-## 📜 API Reference
-
-### Weather API
-```
-GET /api/weather?lat=59.9&lon=10.75
-```
-
-### Crypto API
-```
-GET /api/crypto
-```
-
-### GitHub API
-```
-GET /api/github?username=kurokodairu
-```
-
-### Twitch API
-```
-GET /api/twitch?access_token=...
-```
-
-### VG News API
-```
-GET /api/vg-summary
-```
-
-### Calendar API
-```
-GET /api/calendar
-```
-
-### Search Suggestions
-```
-GET /api/suggest?q=search+query
-```
-
-### Linux Commands
-```
-GET /api/command
-```
-
 
 - Weather data: [YR.no](https://yr.no) (Norwegian Meteorological Institute)
 - Crypto data: [CoinGecko API](https://www.coingecko.com/)

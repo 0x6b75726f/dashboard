@@ -17,6 +17,28 @@
   background: transparent;
 }
 
+/* Dark theme background */
+.app.dark-theme {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+  background-attachment: fixed;
+  position: relative;
+}
+
+.app.dark-theme::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -62,37 +84,29 @@
   flex-shrink: 0;
 }
 
+/* Dashboard 3-column layout */
 .dashboard-columns {
   display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
   gap: 2rem;
   width: 100%;
-}
-
-.left-column,
-.right-column {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 2rem;
-  min-width: 300px;
-}
-
-.left-column {
   align-items: flex-start;
 }
 
-.right-column {
-  align-items: flex-end;
+.column-left,
+.column-middle,
+.column-right {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  flex: 1;
+  min-width: 0;
 }
 
 /* Shared cards */
 .glass-card {
   position: relative;
   overflow: hidden;
-  min-width: 350px;
-  max-width: 450px;
+  width: 100%;
   padding: 1.5rem;
   border: 1px solid var(--card-border);
   border-radius: 20px;
@@ -447,15 +461,27 @@
     font-size: 3rem;
   }
 
-  .left-column,
-  .right-column {
-    align-items: stretch;
+  .dashboard-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: auto;
+    gap: 2rem;
+    align-items: start;
   }
 
-  .glass-card {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
+  .column-left {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .column-middle {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .column-right {
+    grid-column: 2;
+    grid-row: 2;
   }
 
   .stream-item {
@@ -476,7 +502,24 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+  .dashboard-columns {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .column-left,
+  .column-middle,
+  .column-right {
+    width: 100%;
+  }
+
+  .glass-card {
+    width: 100%;
+    max-width: none;
+  }
+
   .weather-main,
   .weather-details {
     flex-direction: column;
